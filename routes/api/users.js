@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
-
+const jwt = require('jsonwebtoken');
+const keys = require('../../config/keys');
+const passport = require('passport');
 // Load user model
 const User = require('../../models/User');
 
@@ -21,7 +23,6 @@ router.post('/register', async (req, res) => {
             msg: 'users exist..'
         });
     } else {
-        console.log(req.body);
         const avatar = gravatar.url(req.body.email, {
             s: '200',
             r: 'pg',
@@ -34,9 +35,6 @@ router.post('/register', async (req, res) => {
             avatar
 
         });
-
-        console.log(newUser);
-
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(newUser.password, salt, (error, hash) => {
                 if (error) throw error;
@@ -57,14 +55,73 @@ router.post('/register', async (req, res) => {
 
 
 
+
+
+// @Route  GET api/users
+// @access public
+
+router.post('/login', async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const user = await User.findOne({
+        email
+    });
+
+    if (user) {
+        // user exist now validate it
+        bcrypt.compare(password, user.password).then(isMatched => {
+            if (isMatched) {
+
+                const payload = {
+                    _id: user._id,
+                    name: user.name,
+                    avatar: user.avatar
+                }
+
+                jwt.sign(
+                    payload,
+                    keys.secretORKey, {
+                        expiresIn: 3600
+                    }, (err, token) => {
+                        res.status(200).json({
+                            msg: 'success',
+                            token: 'bearer ' + token
+                        });
+                    });
+
+
+            } else {
+                res.status(400).json({
+                    password: 'password incorrect '
+                });
+            }
+        })
+
+    } else {
+        res.status(400).json({
+            email: 'users does not exist..'
+        });
+
+    }
+
+});
+
+
 // @Route  POST api/users/register
 // @access public
 
-// router.post('/register', (req, res) => {
-//     res.json({
-//         msg: 'users Registerd..'
-//     });
-// });
+
+router.get('/current', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
+    console.log('hey ');
+
+    res.json({
+        msg: 'Success',
+        user: req.user
+    })
+});
 
 
 module.exports = router;

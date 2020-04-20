@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const app = express();
-
+const passport = require('passport');
 const port = process.env.PORT || 3000;
 
 
@@ -30,10 +30,17 @@ app.use(express.urlencoded({
 }))
 
 
+//Passport Middleware
+
+app.use(passport.initialize());
+
+//Passport config
+require('./config/passport')(passport);
+
 // default
-app.get('/', (req, res) => {
-    res.send('Hello world !!')
-});
+// app.get('/', (req, res) => {
+//     res.send('Hello world !!')
+// });
 
 // USE ROUTES
 app.use('/api/users', users);
