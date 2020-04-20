@@ -23,7 +23,14 @@ mongoose.connect(db, {
     .catch(err => console.log(err));
 
 
-//
+// Middle ware
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}))
+
+
+// default
 app.get('/', (req, res) => {
     res.send('Hello world !!')
 });
