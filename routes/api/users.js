@@ -99,7 +99,7 @@ router.post('/login', async (req, res) => {
             if (isMatched) {
 
                 const payload = {
-                    _id: user._id,
+                    id: user._id,
                     name: user.name,
                     avatar: user.avatar
                 }
