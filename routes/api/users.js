@@ -10,10 +10,24 @@ const User = require('../../models/User');
 
 
 
+// Load Input Validation
+const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
+
+
 // @Route  GET api/users
 // @access public
 
 router.post('/register', async (req, res) => {
+    const {
+        errors,
+        isValid
+    } = validateRegisterInput(req.body);
+
+    // check valiation
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
     const isUserExistAlready = await User.findOne({
         email: req.body.email
     });
@@ -61,6 +75,17 @@ router.post('/register', async (req, res) => {
 // @access public
 
 router.post('/login', async (req, res) => {
+    const {
+        errors,
+        isValid
+    } = validateLoginInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+
+
     const email = req.body.email;
     const password = req.body.password;
 
@@ -115,11 +140,11 @@ router.post('/login', async (req, res) => {
 router.get('/current', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
-    console.log('hey ');
 
     res.json({
         msg: 'Success',
         user: req.user
+
     })
 });
 
