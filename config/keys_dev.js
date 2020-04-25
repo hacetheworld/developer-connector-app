@@ -1,4 +1,5 @@
 module.exports = {
-  mongoURI: "mongodb://localhost:27017/dbConnector",
+  mongoURI:
+    "mongodb+srv://ajay:Create123@dbconnector-phvrx.mongodb.net/devconnector",
   secretOrKey: "secret",
 };
