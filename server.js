@@ -11,8 +11,6 @@ const posts = require("./routes/api/posts");
 
 // DB CONFIG
 const db = require("./config/keys").mongoURI;
-console.log(db);
-
 // connect DB
 mongoose
   .connect(db, {
@@ -50,11 +48,13 @@ app.use("/api/profile", profile);
 app.use("/api/posts", posts);
 
 // server static
+console.log(process.env.NODE_ENV);
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 
   app.get("*", (req, res) => {
-    res.sendfile(path.resolve(__dirname, "client", "build", "index.html"));
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
 app.listen(port, () => {
