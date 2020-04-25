@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../../redux/actions/auth.action";
+import { clearCurrentProfile } from "../../redux/actions/profile.action";
 
 class Navbar extends Component {
   render() {
@@ -9,7 +10,14 @@ class Navbar extends Component {
     const authLinks = (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          <a className="nav-link" href="/" onClick={this.props.logoutUser}>
+          <a
+            className="nav-link"
+            href="/"
+            onClick={() => {
+              this.props.logoutUser();
+              this.props.clearCurrentProfile();
+            }}
+          >
             {isAuthenticated ? (
               <img
                 style={{ width: "25px", marginRight: "6px" }}
@@ -75,6 +83,7 @@ class Navbar extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   logoutUser: (user, history) => dispatch(logoutUser(user, history)),
+  clearCurrentProfile: () => dispatch(clearCurrentProfile()),
 });
 
 const mapStateToProps = (state) => ({

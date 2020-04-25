@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 class Landing extends Component {
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashbord");
+      this.props.history.push("/dashboard");
     }
   }
   render() {

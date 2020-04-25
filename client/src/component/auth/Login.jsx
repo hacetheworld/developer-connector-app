@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import classnames from "classnames";
-
+// import classnames from "classnames";
+import TextField from "../common/textField-group";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { loginUser } from "../../redux/actions/auth.action";
@@ -43,36 +43,24 @@ class Login extends Component {
                 Sign in to your DevConnector account
               </p>
               <form onSubmit={this.handleOnSubmit}>
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.email,
-                    })}
-                    value={email}
-                    onChange={this.handleOnChange}
-                    placeholder="Email Address"
-                    name="email"
-                  />
-                  {errors.email && (
-                    <div className="invalid-feedback"> {errors.email} </div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.password,
-                    })}
-                    value={password}
-                    onChange={this.handleOnChange}
-                    placeholder="Password"
-                    name="password"
-                  />
-                  {errors.password && (
-                    <div className="invalid-feedback"> {errors.password} </div>
-                  )}
-                </div>
+                <TextField
+                  type="email"
+                  value={email}
+                  onChange={this.handleOnChange}
+                  placeholder="Email Address"
+                  name="email"
+                  error={errors.email}
+                />
+
+                <TextField
+                  type="password"
+                  value={password}
+                  onChange={this.handleOnChange}
+                  placeholder="Password"
+                  name="password"
+                  error={errors.password}
+                />
+
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
